@@ -1,0 +1,90 @@
+.wrap{
+    max-width: 600px;
+    height: 100vh;
+    margin: 0 auto;
+    background-color: #628E90;
+    padding:10px 30px;
+    color:#3C2317;
+}
+
+p {
+    line-height: 150%;
+}
+
+.login {
+    height: 50px;
+    display: flex;
+    width: 100%;
+    align-items:center;
+    margin-bottom: 10px;
+}
+
+.login img {
+    height:50px ;
+    width:50px;
+    border-radius: 25px;
+    margin-right: 10px;
+}
+
+#name {
+    color: #F5EFE6;
+    font-weight: bold;
+}
+
+#out {
+    margin-left: auto;
+    }
+
+#output {
+    height: 80vh;
+}
+
+.my_msg {
+    padding: 15px 30px;
+    background-color: #B4CDE6;
+    width: 60%;
+    border-radius: 10px;
+    margin-left: auto;
+    margin-bottom: 18px;
+    white-space: pre-wrap;
+}
+
+.other_msg{
+    padding: 15px 30px;
+    background-color: #F5EFE6;
+    width: 60%;
+    border-radius: 10px;
+    margin-bottom: 18px;
+    white-space: pre-wrap;
+}
+
+.box {
+    height: 15vh;
+    display: flex;
+    align-items:center;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+}
+
+#text{
+    width: 80%;
+}
+
+#uname{
+    width: 80%;
+}
+
+#send{
+    display: block;
+}
+
+
+button {
+    border: none;
+    background-color: #3C2317;
+    color:#F5EFE6;
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-weight: bold;
+}

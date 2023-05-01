@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Firebase:v9:Chatアプリ</title>
+<link rel="stylesheet" href="css/reset.css">
+<link rel="stylesheet" href="css/kadai.css">
+</head>
+<body>
+
+<!-- コンテンツ表示画面 -->
+
+<div class="wrap">
+    <div class="login">
+        <img src="" id="prof">
+        <div id="name"></div> 
+        <button id="out">Logout</button>
+    </div>
+    <div id="output" style="overflow: auto;"></div>
+    <div class="box">
+        <div>
+            <input type="text" id="uname">
+            <textarea id="text"></textarea>
+        </div>
+        <button id="send">Submit</button>
+    </div>
+ </div>
+
+<!--/ コンテンツ表示画面 -->
+
+
+<!-- JQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!-- JQuery -->
+
+
+<!--** 以下Firebase **-->
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-app.js";
+    import { getDatabase, ref, push, set, onChildAdded, remove, onChildRemoved } 
+    from "https://www.gstatic.com/firebasejs/9.21.0/firebase-database.js"; //9.20.0のところは上下とも一致させる
+    import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } 
+    from "https://www.gstatic.com/firebasejs/9.21.0/firebase-auth.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDfpFmP1vrrBcyCxpNhJumaOGY932RZc5k",
+      authDomain: "gsdemo-49c50.firebaseapp.com",
+      projectId: "gsdemo-49c50",
+      storageBucket: "gsdemo-49c50.appspot.com",
+      messagingSenderId: "974105110265",
+      appId: "1:974105110265:web:83ca9ae694a2487266a428"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);//firebaseに繋げてくれている。
+    const db  = getDatabase(app); //RealtimeDataBaseを使う設定
+    const dbRef = ref(db,"chat"); //RealtimeDatabaseの"chat"を使う設定
+
+    //googleAUth
+    const provider = new GoogleAuthProvider();
+    provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+    const auth = getAuth();
+
+    let uid = null;
+
+    //ログインしていれば以下の動作を処理
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            uid = user.uid;
+            //ユーザー情報取得
+            if (user !== null) {
+                user.providerData.forEach((profile) => {
+                    //Login情報取得
+                    $("#name").text(profile.displayName);
+                    $("#prof").attr("src",profile.photoURL);
+                });
+            }
+        } else {
+            _redirect();  // User is signed out
+        }
+    });
+
+    //送信ボタンを押したら送信
+    $("#send").on("click",function(){
+        send();
+    });
+
+    //送信する関数
+    function send(){
+        const msg = {
+            uname : $("#uname").val(),
+            text  : $("#text").val(),
+            uid   : uid 
+            };
+        const newPostRef = push(dbRef);//ユニークキーを発行する
+        set(newPostRef, msg);//ユニークKEYとMSG
+        $("#output").scrollTop($("#output")[0].scrollHeight);
+        //送信したら入力画面の中身を消す
+        // $("#uname").val("");
+        $("#text").val("");
+    };
+
+    // //エンター押したら送信する。
+    // $("#text").on("keydown",function (e) {
+    //     if(e.key == "Enter"){
+    //         send();
+    //     }
+    // });
+
+
+    //データベースからデータを取得する
+    onChildAdded(dbRef,function(data){
+        const msg = data.val();//objectデータを取得
+        const key = data.key; //ユニークkey　削除するときに使う
+        // console.log(key);
+        const ismmsg = msg.uid === uid; //msgのuidとログインuid（自身のuid）を比較
+        const msgclass = ismmsg ? "my_msg":"other_msg";//三項演算子を利用
+        const h ='<div class="del '+ msgclass +'" data-key="' + key + '"><div class="n"><p>'+'name:'+msg.uname+'</p></div><div class="m"><p>'+msg.text+'</p></div></div>';
+        $("#output").append(h);
+    });
+            
+    //クリックで削除
+    $(document).on("click",".del",function(){
+        const key = $(this).data("key");
+        // console.log(key);
+        remove(ref(db, "chat/" + key)); //keyに対応する要素を削除する
+        $(this).remove(); //要素を削除する
+    });
+
+    
+    //logout
+    $("#out").on("click",function(){
+        signOut(auth).then(() =>{
+            _redirect();
+        }).catch((error) =>{
+            console.erro(error);
+        })
+    });
+
+    //redirect=遷移先のページを指定する
+    function _redirect(){
+    location.href="k_login.html";
+    }   
+
+
+</script>
+</body>
+</html>
