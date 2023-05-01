@@ -43,19 +43,42 @@ p {
     padding: 15px 30px;
     background-color: #B4CDE6;
     width: 60%;
+    position: relative;
+    margin: 1.5em 15px 1.5em 0;
     border-radius: 10px;
     margin-left: auto;
-    margin-bottom: 18px;
+    /* margin-bottom: 18px; */
     white-space: pre-wrap;
+}
+
+.my_msg:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    margin-top: -15px;
+    border: 8px solid transparent;
+    border-left: 16px solid #B4CDE6;
 }
 
 .other_msg{
     padding: 15px 30px;
     background-color: #F5EFE6;
     width: 60%;
+    position: relative;
+    margin: 1.5em 0 1.5em 15px;
     border-radius: 10px;
-    margin-bottom: 18px;
     white-space: pre-wrap;
+}
+
+.other_msg:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -24px;
+    margin-top: -15px;
+    border: 8px solid transparent;
+    border-right: 16px solid #F5EFE6;
 }
 
 .box {
