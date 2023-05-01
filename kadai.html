@@ -91,10 +91,12 @@
 
     //送信する関数
     function send(){
+        const timestamp = new Date().getTime();
         const msg = {
             uname : $("#uname").val(),
             text  : $("#text").val(),
-            uid   : uid 
+            uid   : uid,
+            timestamp: timestamp
             };
         const newPostRef = push(dbRef);//ユニークキーを発行する
         set(newPostRef, msg);//ユニークKEYとMSG
@@ -116,20 +118,32 @@
     onChildAdded(dbRef,function(data){
         const msg = data.val();//objectデータを取得
         const key = data.key; //ユニークkey　削除するときに使う
-        // console.log(key);
+        
+        // 日時を取得
+        const timestamp = msg.timestamp;
+        console.log(timestamp);
+        const date = new Date(timestamp);
+        const year = date.getFullYear();
+        const month = ("0" + (date.getMonth() + 1)).slice(-2);
+        const day = ("0" + date.getDate()).slice(-2);
+        const hours = date.getHours().toString().padStart(2, '0'); // 桁揃え
+        const minutes = date.getMinutes().toString().padStart(2, '0'); // 桁揃え
+        const ydm = year + "/" + month + "/" + day + " " + hours + ":" + minutes;
+
         const ismmsg = msg.uid === uid; //msgのuidとログインuid（自身のuid）を比較
-        const msgclass = ismmsg ? "my_msg":"other_msg";//三項演算子を利用
+        const msgclass = ismmsg ? "my_msg":"other_msg";//三項演算子を利用 trueなら前者、falseなら後者
+        //発信者uidとメッセージuidが同一か確認し、同一であれば削除ボタンを付与 
         const delBtn = uid === msg.uid ? '<button class="del_btn">del</button>': '';
-        const h ='<div class="del '+ msgclass +'" data-key="' + key + '"><div class="n"><p>'+'name:'+msg.uname+'</p></div><div class="m"><p>'+msg.text+'</p></div><div class="btn">'+ delBtn+'</div></div>';
+        const h ='<div class="del '+ msgclass +'" data-key="' + key + '"><div class="n"><p>'+'name:'+msg.uname+'</p></div><div class="m"><p>'+msg.text+'</p></div><div class="ydm"><p>'+ ydm +'<p><div class="btn">'+ delBtn+'</div></div></div>';
         $("#output").append(h);
     });
             
     //クリックで削除
     $(document).on("click",".btn",function(){
-        const key = $(this).parent().data("key");//クリックした当該要素を含む親要素の持つkeyを指定する
+        const key = $(this).parent().parent().data("key");//クリックした当該要素を含む親要素の持つkeyを指定する
         console.log(key);
         remove(ref(db, "chat/" + key)); //keyに対応する要素を削除する
-        $(this).parent().remove(); //要素を削除する
+        $(this).parent().parent().remove(); //要素を削除する
     });
 
     

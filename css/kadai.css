@@ -5,6 +5,7 @@
     background-color: #628E90;
     padding:10px 30px;
     color:#3C2317;
+    font-size: 1rem;
 }
 
 p {
@@ -120,6 +121,13 @@ button {
     font-weight: normal;
 }
 
+.ydm {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    font-size: 0.8rem;
+}
+
 .btn{
-    text-align: right;
+    margin-left: 10px;
 }
