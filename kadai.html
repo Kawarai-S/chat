@@ -119,14 +119,15 @@
         // console.log(key);
         const ismmsg = msg.uid === uid; //msgのuidとログインuid（自身のuid）を比較
         const msgclass = ismmsg ? "my_msg":"other_msg";//三項演算子を利用
-        const h ='<div class="del '+ msgclass +'" data-key="' + key + '"><div class="n"><p>'+'name:'+msg.uname+'</p></div><div class="m"><p>'+msg.text+'</p></div>'+'<div class="btn"><button class="del_btn">del</button></div>' +'</div>';
+        const delBtn = uid === msg.uid ? '<button class="del_btn">del</button>': '';
+        const h ='<div class="del '+ msgclass +'" data-key="' + key + '"><div class="n"><p>'+'name:'+msg.uname+'</p></div><div class="m"><p>'+msg.text+'</p></div><div class="btn">'+ delBtn+'</div></div>';
         $("#output").append(h);
     });
             
     //クリックで削除
-    $(document).on("click",".del_btn",function(){
-        const key = $(this).parent().data("key");
-        // console.log(key);
+    $(document).on("click",".btn",function(){
+        const key = $(this).parent().data("key");//クリックした当該要素を含む親要素の持つkeyを指定する
+        console.log(key);
         remove(ref(db, "chat/" + key)); //keyに対応する要素を削除する
         $(this).parent().remove(); //要素を削除する
     });
