@@ -84,25 +84,42 @@ p {
 
 .box {
     height: 15vh;
-    display: flex;
-    align-items:center;
     width: 100%;
-    position: fixed;
-    bottom: 0;
 }
+.c_box {
+    display: flex;
+    width: 100%;
+}
+
 
 #text{
     width: 80%;
+    padding:10px;
+    background-color: #F5EFE6;
+    border: none;
 }
 
 #uname{
     width: 80%;
+    padding:10px;
+    background-color: #F5EFE6;
+    border: none;
 }
 
-#send{
+#send {
     display: block;
+    margin: 0 0 0 auto;
+    height:50px;
 }
 
+
+.n {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    font-size: 0.8rem;
+    /* font-weight: bold;    */
+}
 
 button {
     border: none;
