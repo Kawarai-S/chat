@@ -142,9 +142,11 @@
     //クリックで削除
     $(document).on("click",".btn",function(){
         const key = $(this).parent().parent().data("key");//クリックした当該要素を含む親要素の持つkeyを指定する
-        console.log(key);
+        // console.log(key);
+        if(confirm("この投稿を削除しますか？")){//アラートを表示
         remove(ref(db, "chat/" + key)); //keyに対応する要素を削除する
         $(this).parent().parent().remove(); //要素を削除する
+        }
     });
 
     
