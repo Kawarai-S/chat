@@ -1,6 +1,6 @@
 .wrap{
     max-width: 600px;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0 auto;
     background-color: #628E90;
     padding:10px 30px;
@@ -112,7 +112,6 @@ p {
     height:50px;
 }
 
-
 .n {
     display: flex;
     justify-content: end;
@@ -130,13 +129,20 @@ button {
     font-weight: bold;
 }
 
-.del_btn{
-    border: none;
-    background-color: #628E90;
-    color:#F5EFE6;
-    padding: 6px;
-    font-weight: normal;
+/* .del_btn{ */
+    /* border: none; */
+    /* background-color: #628E90;
+    color:#F5EFE6; */
+    /* padding: 6px; */
+    /* font-weight: normal; */
+/* } */
+
+.del_btn img {
+    width: 18px;
+    height: 18px;
 }
+
+
 
 .ydm {
     display: flex;
@@ -147,4 +153,22 @@ button {
 
 .btn{
     margin-left: 10px;
+}
+
+.li_btn {
+    height: 100px;
+    width: 180px;
+    background-color: #628E90;
+    color: #F5EFE6;
+    font-size: 1.6rem;
+    line-height: 100%;
+}
+
+.li_btn:hover {
+    opacity:0.7;
+}
+
+.li_btn:active{
+    background-color: #F5EFE6;
+    color: #3C2317;
 }

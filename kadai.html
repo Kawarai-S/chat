@@ -134,7 +134,7 @@
         const ismmsg = msg.uid === uid; //msgのuidとログインuid（自身のuid）を比較
         const msgclass = ismmsg ? "my_msg":"other_msg";//三項演算子を利用 trueなら前者、falseなら後者
         //発信者uidとメッセージuidが同一か確認し、同一であれば削除ボタンを付与 
-        const delBtn = uid === msg.uid ? '<button class="del_btn">del</button>': '';
+        const delBtn = uid === msg.uid ? '<div class="del_btn"><img src="img/icon01.png"></div>': '';
         const h ='<div class="del '+ msgclass +'" data-key="' + key + '"><div class="n"><p>'+'name:'+msg.uname+'</p></div><div class="m"><p>'+msg.text+'</p></div><div class="ydm"><p>'+ ydm +'<p><div class="btn">'+ delBtn+'</div></div></div>';
         $("#output").append(h);
     });
