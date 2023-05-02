@@ -1,4 +1,5 @@
 .wrap{
+    width: 60%;
     max-width: 600px;
     min-height: 100vh;
     margin: 0 auto;
@@ -173,3 +174,10 @@ button {
     background-color: #F5EFE6;
     color: #3C2317;
 }
+
+/* @media screen and (max-width: 480px) {
+    .wrap {
+        width: 100%;
+        max-width: 100%;
+      }
+  } */

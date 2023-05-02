@@ -66,7 +66,11 @@
     provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
     const auth = getAuth();
 
+    // uidの初期値をnullとする
     let uid = null;
+    // userPhotoの初期値？をnullとする
+    let userPhoto = null;
+
 
     //ログインしていれば以下の動作を処理
     onAuthStateChanged(auth, (user) => {
@@ -78,10 +82,12 @@
                     //Login情報取得
                     $("#name").text(profile.displayName);
                     $("#prof").attr("src",profile.photoURL);
+                    userPhoto = profile.photoURL;
+
                 });
             }
         } else {
-            _redirect();  // User is signed out
+            _redirect();  // サインアウト
         }
     });
 
@@ -97,7 +103,8 @@
             uname : $("#uname").val(),
             text  : $("#text").val(),
             uid   : uid,
-            timestamp: timestamp
+            timestamp : timestamp,
+            userPhoto : userPhoto
             };
         const newPostRef = push(dbRef);//ユニークキーを発行する
         set(newPostRef, msg);//ユニークKEYとMSG
@@ -135,7 +142,11 @@
         const msgclass = ismmsg ? "my_msg":"other_msg";//三項演算子を利用 trueなら前者、falseなら後者
         //発信者uidとメッセージuidが同一か確認し、同一であれば削除ボタンを付与 
         const delBtn = uid === msg.uid ? '<div class="del_btn"><img src="img/icon01.png"></div>': '';
-        const h ='<div class="del '+ msgclass +'" data-key="' + key + '"><div class="n"><p>'+'name:'+msg.uname+'</p></div><div class="m"><p>'+msg.text+'</p></div><div class="ydm"><p>'+ ydm +'<p><div class="btn">'+ delBtn+'</div></div></div>';
+
+        //プロフィール画像を定義
+        const photo = uid !== msg.uid ? '<img src="'+msg.userPhoto+'" width="30" height="30">': '';
+
+        const h =''+photo+'<div class="del '+ msgclass +'" data-key="' + key + '"><div class="n"><p>'+'name:'+msg.uname+'</p></div><div class="m"><p>'+msg.text+'</p></div><div class="ydm"><p>'+ ydm +'<p><div class="btn">'+ delBtn+'</div></div></div>';
         $("#output").append(h);
     });
             
