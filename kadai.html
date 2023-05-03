@@ -19,7 +19,7 @@
     <div id="output" style="overflow: auto;"></div>
     <div class="box">
         
-            <input type="text" id="uname" placeholder="Your Name...">
+            <!-- <input type="text" id="uname" placeholder="Your Name..."> -->
         <div class="c_box">
             <textarea id="text" placeholder="To talk in the discord!"></textarea>
             <button id="send">Submit</button>
@@ -100,7 +100,7 @@
     function send(){
         const timestamp = new Date().getTime();
         const msg = {
-            uname : $("#uname").val(),
+            // uname : $("#uname").val(),
             text  : $("#text").val(),
             uid   : uid,
             timestamp : timestamp,
@@ -143,10 +143,11 @@
         //発信者uidとメッセージuidが同一か確認し、同一であれば削除ボタンを付与 
         const delBtn = uid === msg.uid ? '<div class="del_btn"><img src="img/icon01.png"></div>': '';
 
-        //プロフィール画像を定義
-        const photo = uid !== msg.uid ? '<img src="'+msg.userPhoto+'" width="30" height="30">': '';
+        //プロフィール画像を自分以外だったら付与
+        const photo = uid !== msg.uid ? '<img class="icon" src="'+msg.userPhoto+'" width="50" height="50">': '';
 
-        const h =''+photo+'<div class="del '+ msgclass +'" data-key="' + key + '"><div class="n"><p>'+'name:'+msg.uname+'</p></div><div class="m"><p>'+msg.text+'</p></div><div class="ydm"><p>'+ ydm +'<p><div class="btn">'+ delBtn+'</div></div></div>';
+        // const h =''+photo+'<div class="del '+ msgclass +'" data-key="' + key + '"><div class="m"><p>'+msg.text+'</p></div><div class="ydm"><p>'+ ydm +'<p><div class="btn">'+ delBtn+'</div></div></div>';
+        const h ='<div class="del" data-key="' + key + '">'+photo+'<div class="'+ msgclass +'""><div class="m"><p>'+msg.text+'</p></div><div class="ydm"><p>'+ ydm +'<p><div class="btn">'+ delBtn+'</div></div></div></div>';
         $("#output").append(h);
     });
             
@@ -160,7 +161,6 @@
         }
     });
 
-    
     //logout
     $("#out").on("click",function(){
         signOut(auth).then(() =>{
