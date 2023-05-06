@@ -72,11 +72,10 @@
     provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
     const auth = getAuth();
 
-    // uidの初期値をnullとする
+    // onAuthStateChangedの実行前に、uidを初期化する
     let uid = null;
-    // userPhotoの初期値をnullとする
+    // onAuthStateChangedの実行前に、userPhotoを初期化する
     let userPhoto = null;
-
 
     //ログインしていれば以下の動作を処理
     onAuthStateChanged(auth, (user) => {
@@ -86,9 +85,9 @@
             if (user !== null) {
                 user.providerData.forEach((profile) => {
                     //Login情報取得
-                    $("#name").text(profile.displayName);
-                    $("#prof").attr("src",profile.photoURL);
-                    userPhoto = profile.photoURL;
+                    $("#name").text(profile.displayName); //HTML要素のtextを上書きする
+                    $("#prof").attr("src",profile.photoURL); //HTML要素の属性を変更する
+                    userPhoto = profile.photoURL; //変数userPhotoにプロフィール写真のURLを格納する
                 });
             }
         } else {
@@ -105,13 +104,13 @@
     function send(){
         const timestamp = new Date().getTime();//日時を取得する
         const msg = {                     //msgの中に以下の情報を配列として格納
-            text  : $("#text").val(),
-            uid   : uid,
-            timestamp : timestamp,
-            userPhoto : userPhoto
+            text  : $("#text").val(), //フォームのテキスト
+            uid   : uid,              //送信者のID
+            timestamp : timestamp,    //送信時の日時
+            userPhoto : userPhoto     //送信者のプロフィール写真のURL
             };
         const newPostRef = push(dbRef);//ユニークキーを発行する
-        set(newPostRef, msg);//ユニークKEYとMSG
+        set(newPostRef, msg);//ユニークキーにmsgのオブジェクトデータを紐付ける
         $("#output").scrollTop($("#output")[0].scrollHeight);//最新の場所にスクロールされる
         $("#text").val("");//送信したら入力画面の中身を空にする
     };
@@ -125,8 +124,8 @@
 
 
     //データベースからデータを取得する
-    onChildAdded(dbRef,function(data){
-        const msg = data.val();//objectデータを取得
+    onChildAdded(dbRef,function(data){ //dbRefを参照、新しい子要素の情報をもつオブジェクト(data)を引数とする。
+        const msg = data.val(); //objectデータを取得
         const key = data.key; //ユニークkeyを取得。削除するときに使う
         
         // 日時を取得
@@ -139,15 +138,13 @@
         const minutes = date.getMinutes().toString().padStart(2, '0'); // 桁揃え
         const ydm = year + "/" + month + "/" + day + " " + hours + ":" + minutes;
 
-        const ismmsg = msg.uid === uid; //msgのuidとログインuid（自身のuid）を比較
-        const msgclass = ismmsg ? "my_msg":"other_msg";//三項演算子を利用 trueなら前者、falseなら後者
-        //発信者uidとメッセージuidが同一か確認し、同一であれば削除ボタンを付与 
-        const delBtn = uid === msg.uid ? '<div class="del_btn"><img src="img/icon01.png"></div>': '';
-
-        //プロフィール画像を自分以外だったら付与
-        const photo = uid !== msg.uid ? '<img class="icon" src="'+msg.userPhoto+'" width="50" height="50">': '';
-
-        // const h =''+photo+'<div class="del '+ msgclass +'" data-key="' + key + '"><div class="m"><p>'+msg.text+'</p></div><div class="ydm"><p>'+ ydm +'<p><div class="btn">'+ delBtn+'</div></div></div>';
+        const ismmsg = msg.uid === uid; //当該msg発信者のuidとログインuidを比較
+        const msgclass = ismmsg ? "my_msg":"other_msg"; //trueなら前者、falseなら後者が格納される
+        //削除ボタンを付与 
+        const delBtn = ismmsg ? '<div class="del_btn"><img src="img/icon01.png"></div>': '';
+        //プロフィール画像を付与
+        const photo = ismmsg ? '': '<img class="icon" src="'+msg.userPhoto+'" width="50" height="50">';
+        
         const h ='<div class="del" data-key="' + key + '">'+photo+'<div class="'+ msgclass +'""><div class="m"><p>'+msg.text+'</p></div><div class="ydm"><p>'+ ydm +'<p><div class="btn">'+ delBtn+'</div></div></div></div>';
         $("#output").append(h);
         $("#output").scrollTop($("#output")[0].scrollHeight);
@@ -195,7 +192,7 @@
 
     //redirect=遷移先のページを指定する
     function _redirect(){
-    location.href="k_login.html";
+        location.href="k_login.html";
     }   
 
 

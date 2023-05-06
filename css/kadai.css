@@ -39,9 +39,9 @@ body {
     margin-left: auto;
     }
 
-/* #output {
-    height: 80vh;
-} */
+#output {
+    height: 85vh;
+}
 
 .my_msg {
     padding: 24px 24px 15px 24px;
